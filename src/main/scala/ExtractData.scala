@@ -26,7 +26,7 @@ object ExtractData {
 	private var sensorDataCollection : Seq[Record] = List()
 
 	// The sensor ID, (first field), is a UUID, but a string is used 
-	// for the purpose of the exercise. It should take little effort time to 
+	// for the purpose of the exercise. It should take little effort to 
 	// change the String to a java.util.UUID
 	private def readDataFromCSV: Seq[Record] = {
 		// drop 1st row from data file as it contains only column names and not values.
