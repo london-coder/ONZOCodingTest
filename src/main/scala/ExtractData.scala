@@ -11,8 +11,7 @@ import org.json4s.native.JsonMethods._
  * an exercise in solving a problem in the context of an interview coding test.
  * It meets that criterion and ONLY that criterion. It is done with someone
  * 'looking over your shoulder' in a short, timed exercise to understand candidate
- * thinking, approach to solving a problem and understanding of Scala,
- * nothing more.
+ * thinking, approach to solving a problem and understanding of Scala, no more.
  */
 object ExtractData {
 	case class RawRecord(sensor_id: String, timestamp: String, consumption_Wh: Int)
@@ -26,9 +25,9 @@ object ExtractData {
 	// for both json and csv formatted data.
 	private var sensorDataCollection : Seq[Record] = List()
 
-	// The sensor ID, (first field in the tuple), is a UUID, but a string is used 
-	// for the purpose of the exercise. It should take little extra time to change 
-	// the String to a java.util.UUID
+	// The sensor ID, (first field), is a UUID, but a string is used 
+	// for the purpose of the exercise. It should take little effort to 
+	// change the String to a java.util.UUID
 	private def readDataFromCSV: Seq[Record] = {
 		// drop 1st row from data file as it contains only column names and not values.
 		val data = fromFile(csvFileName).getLines.toList.map(x => x.split(" ")).drop(1)
@@ -46,7 +45,6 @@ object ExtractData {
 		var json = parse(fromFile(jsonFileName).mkString)
 		// this can be fixed with implicit format function
 		val something = json.extract[List[RawRecord]] 
-
 		for {
 			r <- something
 			rec = r match {
@@ -55,8 +53,8 @@ object ExtractData {
 		} yield rec
 	}
 
-	def allSensorData: Seq[Record] = {
-		if (sensorDataCollection.isEmpty) sensorDataCollection = readDataFromJson
+	def allSensorDataCSV: Seq[Record] = {
+		if (sensorDataCollection.isEmpty) sensorDataCollection = readDataFromCSV
 		sensorDataCollection
 	}
 
@@ -66,7 +64,7 @@ object ExtractData {
 	}
 
 	def sensorData(sensor: String): Seq[Record] = {
-		if(sensorDataCollection.isEmpty) sensorDataCollection = readDataFromJson
+		if(sensorDataCollection.isEmpty) sensorDataCollection = readDataFromCSV
 		sensorDataCollection filter { case Record(s,t,k) => s.equals(sensor) }
 	}
 
@@ -75,6 +73,6 @@ object ExtractData {
 
 	def averageConsumptionForPeriod(duration: Range, sensor: String): BigDecimal = {
 		val bySensor = sensorData(sensor) filter { case Record(id, dt, kw) => duration.contains(dt.getHour()) }
-		BigDecimal( ((bySensor map { case Record(s, d, k) => k } sum).toDouble / bySensor.length)/1000 ).setScale(6, RoundingMode.UP)
+		BigDecimal(((bySensor map { case Record(s, d, k) => k } sum).toDouble / bySensor.length)/1000 ).setScale(6, RoundingMode.UP)
 	}
 }
