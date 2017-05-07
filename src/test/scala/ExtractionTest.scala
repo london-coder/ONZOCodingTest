@@ -1,5 +1,5 @@
 import org.scalatest.{FlatSpec, Matchers}
-
+import java.util.UUID
 
 class ExtractionTest extends FlatSpec with Matchers {
 
@@ -11,7 +11,7 @@ class ExtractionTest extends FlatSpec with Matchers {
 		assert(ExtractData.allSensorDataCSV.length === 72)
 	}
 
-	val targetSensor = "b08c6195-8cd9-43ab-b94d-e0b887dd73d2"
+	val targetSensor = UUID.fromString("b08c6195-8cd9-43ab-b94d-e0b887dd73d2")
 
 	"Data for a single sensor" should "have 24 values" in {
 		assert(ExtractData.sensorData(targetSensor).length === 24)
