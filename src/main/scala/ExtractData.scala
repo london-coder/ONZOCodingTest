@@ -39,13 +39,22 @@ object ExtractData {
 	// TODO:  create a formatter to convert String to ZonedDateTime. That would
 	// eliminate the need to convert between 2 case classes!
 	private def readDataFromJson: Seq[Record] = {
-		var json = parse(fromFile(jsonFileName).mkString).extract[List[RawRecord]]
+		val json = parse(fromFile(jsonFileName).mkString).extract[List[RawRecord]]
 		for {
 			r <- json
 			rec = r match {
 				case RawRecord(s,t,k) => Record(UUID.fromString(s), ZonedDateTime.parse(t), k)
 			}
 		} yield rec
+/*		
+		val JArray(list) = json
+		for {
+			record <- list
+			JString(sensor) = record \ "sensor_id"
+			JString(timestamp) = record \ "timestamp"
+			JLong(wh) = record \ "consumption_Wh"
+		} yield Record(UUID.fromString(sensor), ZonedDateTime.parse(timestamp), wh.toInt)
+*/
 	}
 
 	def allSensorDataCSV: Seq[Record] = {
