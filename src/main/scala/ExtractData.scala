@@ -1,9 +1,8 @@
-import java.time.ZonedDateTime
-import java.util.UUID
 import scala.io.Source._
 import scala.language.postfixOps
 import scala.math.BigDecimal.RoundingMode
-
+import java.util.UUID
+import java.time.ZonedDateTime
 import org.json4s._
 import org.json4s.native.JsonMethods._
 /**
@@ -13,9 +12,7 @@ import org.json4s.native.JsonMethods._
  * 'looking over your shoulder' in a short, timed exercise to understand candidate
  * thinking, approach to solving a problem and understanding of Scala, no more.
  */
-object ExtractData {
-	case class RawRecord(sensor_id: String, timestamp: String, consumption_Wh: Int)
-	case class Record(sensor_id: UUID, timestamp: ZonedDateTime, consumption_Wh: Int)
+object ExtractData extends MeterData {
 
 	// for a production system, these would be either runtime parameters or
 	// perhaps read from a stream.
